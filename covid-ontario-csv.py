@@ -1,9 +1,11 @@
 import urllib.request
 import csv
 from datetime import datetime
+# from plotly.graph_objs import Bar, Layout
+# from plotly import offline
 import matplotlib.pyplot as plt
 
-filename = "https://data.ontario.ca/dataset/f4f86e54-872d-43f8-8a86-3892fd3cb5e6/resource/ed270bb8-340b-41f9-a7c6-e8ef587e6d11/download/covidtesting.csv"
+filename = "https://data.ontario.ca/dataset/f4112442-bdc8-45d2-be3c-12efae72fb27/resource/455fd63b-603d-4608-8216-7d8647f43350/download/conposcovidloc.csv"
 response = urllib.request.urlopen(filename)
 lines = [l.decode("utf-8") for l in response.readlines()]
 reader = csv.reader(lines)
@@ -15,40 +17,52 @@ header_row = next(reader)
     # print(index, column_header)
 
 # Get dates, case and death counts from CSV file.
-dates, cases, deaths = [], [], []
+dates, ages, outcomes = [], [], []
 for row in reader:
-    current_date = datetime.strptime(row[0], "%Y-%m-%d")
+    try:
+        current_date = datetime.strptime(row[1], "%Y-%m-%d")
 
-    if row[4] == "":
-        case = 0
+        # if row[5] == "":
+        #     age = 0
+        # else:
+        age = row[5]
+
+        # if row[8] =="":
+        #     outcome = 0
+        # else:
+        outcome = row[8]
+
+    except ValueError:
+        print(f"Missing data for {current_date}")
     else:
-        case = int(row[4])
+        dates.append(current_date)
+        ages.append(age)
+        outcomes.append(outcome)
 
-    if row[6] =="":
-        death = 0
-    else:
-        death = int(row[6])
-    
-    dates.append(current_date)
-    cases.append(case)
-    deaths.append(death)
+Age_Group = ["<20", "20s", "30s", "40s", "50s", "60s", "70s", "80s", "90s", "UNKNOWN"]
 
-# print(deaths)
+frequencies = []
+for age in Age_Group:
+    frequency = ages.count(age)
+    frequencies.append(frequency)
+print(frequencies)
+
+# print(ages)
 
 # Plot the counts.
 plt.style.use("dark_background")
 fig, ax = plt.subplots()
-ax.scatter(dates, cases, c="blue", s=2, label="Confirmed Cases")
-ax.scatter(dates, deaths, c="red", s=2, label="Cumulative Deaths")
+ax.bar(Age_Group, frequencies, label="Confirmed Cases")
+# # ax.scatter(dates, deaths, c="red", s=2, label="Cumulative Deaths")
 
 # Format plot.
-plt.title("Ontario COVID-19\nConfirmed Cases and Cumulative Deaths", fontsize=16)
-plt.xlabel("Date", fontsize=12)
+plt.title("Ontario COVID-19\nConfirmed Cases by Age Group", fontsize=16)
+plt.xlabel("Age Group", fontsize=12)
 fig.autofmt_xdate()
 plt.ylabel("Count", fontsize=12)
 plt.tick_params(axis="both", which="major", labelsize=16)
 
-# Add legend
-ax.legend(loc="upper right", frameon=True)
+# # Add legend
+# ax.legend(loc="upper right", frameon=True)
 
 plt.show()
