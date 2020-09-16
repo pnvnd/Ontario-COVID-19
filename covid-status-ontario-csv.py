@@ -51,4 +51,8 @@ plt.tick_params(axis="both", which="major", labelsize=16)
 # Add legend
 ax.legend(loc="upper right", frameon=True)
 
+# Save chart
+plt.savefig("covid_cases_deaths.png")
+
 plt.show()
+
