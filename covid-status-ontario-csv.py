@@ -15,14 +15,14 @@ header_row = next(reader)
     # print(index, column_header)
 
 # Get dates, case and death counts from CSV file.
-dates, cases, deaths = [], [], []
+dates, casesOnt, deaths = [], [], []
 for row in reader:
     current_date = datetime.strptime(row[0], "%Y-%m-%d")
 
     if row[4] == "":
-        case = 0
+        caseOnt = 0
     else:
-        case = int(row[4])
+        caseOnt = int(row[4])
 
     if row[6] =="":
         death = 0
@@ -30,7 +30,7 @@ for row in reader:
         death = int(row[6])
     
     dates.append(current_date)
-    cases.append(case)
+    casesOnt.append(caseOnt)
     deaths.append(death)
 
 # print(deaths)
@@ -38,7 +38,7 @@ for row in reader:
 # Plot the counts.
 plt.style.use("dark_background")
 fig, ax = plt.subplots()
-ax.scatter(dates, cases, c="blue", s=2, label="Confirmed Cases")
+ax.scatter(dates, casesOnt, c="blue", s=2, label="Confirmed Cases")
 ax.scatter(dates, deaths, c="red", s=2, label="Cumulative Deaths")
 
 # Format plot.
