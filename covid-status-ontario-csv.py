@@ -47,6 +47,7 @@ plt.xlabel("Date", fontsize=12)
 fig.autofmt_xdate()
 plt.ylabel("Count", fontsize=12)
 plt.tick_params(axis="both", which="major", labelsize=16)
+ax.set_ylim(bottom=0)
 
 # Add legend
 ax.legend(loc="upper right", frameon=True)
