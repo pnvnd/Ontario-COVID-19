@@ -52,7 +52,7 @@ ax.set_ylim(bottom=0)
 # Add legend
 ax.legend(loc="upper right", frameon=True)
 
-# Save chart
+# Save chart to file
 plt.savefig("covid_cases_deaths.png")
 
 plt.show()
