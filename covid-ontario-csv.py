@@ -1,71 +1,69 @@
+#!/usr/bin/python3
+""" Ontario COVID-19 Statistics by Peter Nguyen """
+
 import urllib.request
 import csv
 from datetime import datetime
-# from plotly.graph_objs import Bar, Layout
-# from plotly import offline
 import matplotlib.pyplot as plt
 
-filename = "https://data.ontario.ca/dataset/f4112442-bdc8-45d2-be3c-12efae72fb27/resource/455fd63b-603d-4608-8216-7d8647f43350/download/conposcovidloc.csv"
-response = urllib.request.urlopen(filename)
-lines = [l.decode("utf-8") for l in response.readlines()]
-reader = csv.reader(lines)
-header_row = next(reader)
+class OntarioCovid19:
 
-# print(header_row)
+    def __init__(self, master):
+        # Load Data
+        filename = "https://data.ontario.ca/dataset/f4112442-bdc8-45d2-be3c-12efae72fb27/resource/455fd63b-603d-4608-8216-7d8647f43350/download/conposcovidloc.csv"
+        response = urllib.request.urlopen(filename)
+        lines = [l.decode("utf-8") for l in response.readlines()]
+        reader = csv.reader(lines)
+        header_row = next(reader)
 
-# for index, column_header in enumerate(header_row):
-    # print(index, column_header)
+        dates, ages, outcomes = [], [], []
+        for row in reader:
+            try:
+                current_date = datetime.strptime(row[1], "%Y-%m-%d")
+                age = row[5]
+                outcome = row[8]
 
-# Get dates, case and death counts from CSV file.
-dates, ages, outcomes = [], [], []
-for row in reader:
-    try:
-        current_date = datetime.strptime(row[1], "%Y-%m-%d")
+            except ValueError:
+                print(f"Missing data for {current_date}")
+            else:
+                dates.append(current_date)
+                ages.append(age)
+                outcomes.append(outcome)
 
-        # if row[5] == "":
-        #     age = 0
-        # else:
-        age = row[5]
+        Age_Group = ["<20", "20s", "30s", "40s", "50s", "60s", "70s", "80s", "90s", "UNKNOWN"]
 
-        # if row[8] =="":
-        #     outcome = 0
-        # else:
-        outcome = row[8]
+        frequencies = []
+        for age in Age_Group:
+            frequency = ages.count(age)
+            frequencies.append(frequency)
+        print(frequencies)
 
-    except ValueError:
-        print(f"Missing data for {current_date}")
-    else:
-        dates.append(current_date)
-        ages.append(age)
-        outcomes.append(outcome)
+        # Build the GUI
 
-Age_Group = ["<20", "20s", "30s", "40s", "50s", "60s", "70s", "80s", "90s", "UNKNOWN"]
+        # Plot the counts.
+        plt.style.use("dark_background")
+        fig, ax = plt.subplots()
+        ax.bar(Age_Group, frequencies, label="Confirmed Cases")
+        # # ax.scatter(dates, deaths, c="red", s=2, label="Cumulative Deaths")
 
-frequencies = []
-for age in Age_Group:
-    frequency = ages.count(age)
-    frequencies.append(frequency)
-print(frequencies)
+        # Format plot.
+        plt.title("Ontario COVID-19\nConfirmed Cases by Age Group", fontsize=16)
+        plt.xlabel("Age Group", fontsize=12)
+        fig.autofmt_xdate()
+        plt.ylabel("Count", fontsize=12)
+        plt.tick_params(axis="both", which="major", labelsize=16)
 
-# print(ages)
+        # # Add legend
+        # ax.legend(loc="upper right", frameon=True)
 
-# Plot the counts.
-plt.style.use("dark_background")
-fig, ax = plt.subplots()
-ax.bar(Age_Group, frequencies, label="Confirmed Cases")
-# # ax.scatter(dates, deaths, c="red", s=2, label="Cumulative Deaths")
+        # Save chart
+        plt.savefig("ontario_covid_ages.png")
 
-# Format plot.
-plt.title("Ontario COVID-19\nConfirmed Cases by Age Group", fontsize=16)
-plt.xlabel("Age Group", fontsize=12)
-fig.autofmt_xdate()
-plt.ylabel("Count", fontsize=12)
-plt.tick_params(axis="both", which="major", labelsize=16)
+        plt.show()
 
-# # Add legend
-# ax.legend(loc="upper right", frameon=True)
+def main():
+    root = plt.show()
+    app = OntarioCovid19(root)
+    root.mainloop()
 
-# Save chart
-plt.savefig("ontario_covid_ages.png")
-
-plt.show()
+if __name__ == "__main__": main()
