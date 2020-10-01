@@ -42,7 +42,7 @@ ax.scatter(dates, casesOnt, c="blue", s=2, label="Confirmed Cases")
 ax.scatter(dates, deaths, c="red", s=2, label="Cumulative Deaths")
 
 # Format plot.
-plt.title("Ontario COVID-19\nConfirmed Cases and Cumulative Deaths", fontsize=16)
+plt.title("Ontario COVID-19\nActive Confirmed Cases and Cumulative Deaths", fontsize=16)
 plt.xlabel("Date", fontsize=12)
 fig.autofmt_xdate()
 plt.ylabel("Count", fontsize=12)
@@ -56,7 +56,7 @@ ax.legend(loc="upper left", frameon=True)
 plt.tight_layout()
 
 # Save chart to file
-plt.savefig("covid_cases_deaths.png", dpi=300)
+plt.savefig("covid_cases_deaths.png", dpi=150)
 
 plt.show()
 
