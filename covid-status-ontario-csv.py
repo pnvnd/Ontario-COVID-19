@@ -50,10 +50,13 @@ plt.tick_params(axis="both", which="major", labelsize=16)
 ax.set_ylim(bottom=0)
 
 # Add legend
-ax.legend(loc="upper right", frameon=True)
+ax.legend(loc="upper left", frameon=True)
+
+# Fix trimming issue with output chart
+plt.tight_layout()
 
 # Save chart to file
-plt.savefig("covid_cases_deaths.png")
+plt.savefig("covid_cases_deaths.png", dpi=300)
 
 plt.show()
 
