@@ -22,12 +22,12 @@ for row in reader:
     if row[4] == "":
         caseOnt = 0
     else:
-        caseOnt = int(row[4])
+        caseOnt = float(row[4])
 
     if row[6] =="":
         death = 0
     else:
-        death = int(row[6])
+        death = float(row[6])
     
     dates.append(current_date)
     casesOnt.append(caseOnt)
