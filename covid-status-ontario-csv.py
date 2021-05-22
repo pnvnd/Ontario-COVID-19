@@ -17,7 +17,7 @@ header_row = next(reader)
 # Get dates, case and death counts from CSV file.
 dates, casesOnt, deaths = [], [], []
 for row in reader:
-    current_date = datetime.strptime(row[0], "%m-%d-%Y")
+    current_date = datetime.strptime(row[0], "%Y-%m-%d")
 
     if row[4] == "":
         caseOnt = 0
