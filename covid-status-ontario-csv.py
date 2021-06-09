@@ -9,11 +9,6 @@ lines = [l.decode("utf-8") for l in response.readlines()]
 reader = csv.reader(lines)
 header_row = next(reader)
 
-# print(header_row)
-
-# for index, column_header in enumerate(header_row):
-    # print(index, column_header)
-
 # Get dates, case and death counts from CSV file.
 dates, casesOnt, deaths = [], [], []
 for row in reader:
@@ -32,8 +27,6 @@ for row in reader:
     dates.append(current_date)
     casesOnt.append(caseOnt)
     deaths.append(death)
-
-# print(deaths)
 
 # Plot the counts.
 plt.style.use("dark_background")
@@ -59,4 +52,3 @@ plt.tight_layout()
 plt.savefig("covid_cases_deaths.png", dpi=150)
 
 plt.show()
-
